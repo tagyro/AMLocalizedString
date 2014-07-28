@@ -72,7 +72,9 @@ static NSBundle *bundle = nil;
 // If this function is not called it will use the default OS language.
 // If the language does not exists y returns the default OS language.
 - (void) setLanguage:(NSString*) l{
+#ifdef DEBUG
 	NSLog(@"preferredLang: %@", l);
+#endif
 	
 	NSString *path = [[ NSBundle mainBundle ] pathForResource:l ofType:@"lproj" ];
 	
