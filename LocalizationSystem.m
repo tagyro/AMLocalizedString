@@ -18,7 +18,10 @@ static NSBundle *bundle = nil;
 
 +(LocalizationSystem *)sharedLocalSystem {
     static dispatch_once_t once;
-    dispatch_once(&once, ^ { _sharedLocalSystem = [[super allocWithZone:nil] init]; });
+    dispatch_once(&once, ^ {
+        _sharedLocalSystem = [[super allocWithZone:nil] init];
+        [_sharedLocalSystem setLanguage:[_sharedLocalSystem getLanguage]];
+    });
     return _sharedLocalSystem;
 }
 
@@ -59,6 +62,9 @@ static NSBundle *bundle = nil;
 // AMLocalizedString(@"Text to localize",@"Alternative text, in case hte other is not find");
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)comment
 {
+    if (!bundle) {
+        bundle = nil;
+    }
 	return [bundle localizedStringForKey:key value:comment table:nil];
 }
 
@@ -78,12 +84,20 @@ static NSBundle *bundle = nil;
 	
 	NSString *path = [[ NSBundle mainBundle ] pathForResource:l ofType:@"lproj" ];
 	
- 
-	if (path == nil)
+    if ([l isEqualToString:@"en"]) {
+        path = [[ NSBundle mainBundle ] pathForResource:@"Base" ofType:@"lproj" ];
+    }
+    if (path == nil) {
 		//in case the language does not exists
 		[self resetLocalization];
-	else
+    }
+    else {
 		bundle = [NSBundle bundleWithPath:path];
+        //
+        [[NSUserDefaults standardUserDefaults] setObject:@[l] forKey:@"AppleLanguages"];
+        //
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 // Just gets the current setted up language.
@@ -106,7 +120,12 @@ static NSBundle *bundle = nil;
 // LocalizationReset;
 - (void) resetLocalization
 {
-	bundle = [NSBundle mainBundle];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AppleLanguages"];
+    //
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    //
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Base" ofType:@"lproj" ];
+    bundle = [NSBundle bundleWithPath:path];
 }
 
 
