@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AMLocalized"
-  s.version      = "0.1"
+  s.version      = "0.3"
   s.summary      = "Localization system that supports changing the language at run-time and adds support for multiple languages"
 
   # This description is used to generate tags and improve search results.
@@ -91,7 +91,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/tagyro/AMLocalizedString.git", :tag => "0.1" }
+  s.source       = { :git => "https://github.com/tagyro/AMLocalizedString.git", :tag => "0.3" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
